@@ -16,135 +16,22 @@ const OPT = {
     "themeURL" : "https://raw.githubusercontent.com/gdtool/cloudflare-workers-blog/master/themes/default2.0/", // 模板地址,以 "/"" 结尾
     "html404" : `<b>404</b>`,//404页面代码
     "codeBeforHead":`<style>
-pre {
-  --bg: #f8f9fa;
-  --border: #e9ecef;
-  --text: #374151;
-  background: var(--bg) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
-  padding: 20px !important;
-  margin: 20px 0 !important;
-  overflow-x: auto !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-  position: relative !important;
-  font-family: 'SF Mono', Consolas, monospace !important;
-  font-size: 14px !important;
-  line-height: 1.5 !important;
-}
-pre::before {
-  content: attr(data-lang, '') !important;
-  position: absolute !important;
-  top: 12px !important;
-  left: 16px !important;
-  background: #6b7280 !important;
-  color: white !important;
-  padding: 2px 8px !important;
-  border-radius: 4px !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.5px !important;
-  z-index: 10 !important;
-  text-transform: uppercase !important;
-}
-.copy-container {
-  position: absolute !important;
-  top: 12px !important;
-  right: 12px !important;
-  display: flex !important;
-  gap: 0 !important;
-  opacity: 0 !important;
-  transition: opacity 0.2s ease !important;
-}
-pre:hover .copy-container { opacity: 1 !important; }
-.copy-btn {
-  width: 24px !important;
-  height: 24px !important;
-  background: #6b7280 !important;
-  border: none !important;
-  border-radius: 4px 0 0 4px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: white !important;
-  font-size: 12px !important;
-}
-.copy-btn:hover { background: #4b5563 !important; }
-.copy-btn.copied { background: #10b981 !important; }
-.copy-text {
-  width: 28px !important;
-  height: 24px !important;
-  background: #9ca3af !important;
-  border: none !important;
-  border-radius: 0 4px 4px 0 !important;
-  color: white !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  padding: 0 4px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.copy-text:hover { background: #6b7280 !important; }
-code {
-  color: var(--text) !important;
-  background: none !important;
-}
-code[class*="language-bash"] { color: #059669 !important; }
-code[class*="language-sh"] { color: #059669 !important; }
-code[class*="language-nginx"], code[class*="language-conf"] { color: #d97706 !important; }
+pre{position:relative;background:#f8f9fa;border:1px solid #e9ecef;border-radius:8px;padding:20px;margin:20px 0;overflow:auto;box-shadow:0 1px 3px rgba(0,0,0,0.1);font-family:Consolas,monospace;font-size:14px}
+pre::before{content:attr(data-lang,"代码");position:absolute;top:10px;left:14px;background:#6b7280;color:#fff;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;z-index:10;text-transform:uppercase}
+.copy-container{position:absolute;top:10px;right:12px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
+pre:hover .copy-container{opacity:1}
+.copy-btn{width:28px;height:24px;background:#6b7280;color:#fff;border:none;border-radius:6px 0 0 6px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+.copy-btn:hover{background:#4b5563}
+.copy-btn.copied{background:#10b981}
+.copy-text{width:36px;height:24px;background:#9ca3af;color:#fff;border:none;border-radius:0 6px 6px 0;font-size:11px;padding:0 4px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.copy-text:hover{background:#6b7280}
+code{color:#374151;background:none}
+code[class*="language-bash"],code[class*="language-sh"]{color:#059669}
+code[class*="language-nginx"],code[class*="language-conf"]{color:#d97706}
 </style>
 <script>
-function initCodeBlocks() {
-  document.querySelectorAll('pre code').forEach(code => {
-    let langMatch = code.className.match(/language-(\\w+)/);
-    let lang = langMatch ? langMatch[1].toUpperCase() : '';
-    code.parentNode.dataset.lang = lang;
-    
-    if (code.parentNode.querySelector('.copy-container')) return;
-    
-    let container = document.createElement('div');
-    container.className = 'copy-container';
-    
-    let btn = document.createElement('button');
-    btn.innerHTML = '📋';
-    btn.className = 'copy-btn';
-    
-    let text = document.createElement('span');
-    text.innerHTML = '复制';
-    text.className = 'copy-text';
-    
-    container.appendChild(btn);
-    container.appendChild(text);
-    code.parentNode.appendChild(container);
-    
-    let copyText = () => {
-      let text = code.innerText.trim();
-      navigator.clipboard.writeText(text).then(() => {
-        btn.innerHTML = '✅';
-        btn.classList.add('copied');
-        text.innerHTML = '已复制';
-        setTimeout(() => {
-          btn.innerHTML = '📋';
-          btn.classList.remove('copied');
-          text.innerHTML = '复制';
-        }, 1800);
-      });
-    };
-    
-    btn.onclick = copyText;
-    text.onclick = copyText;
-  });
-}
-
-initCodeBlocks();
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCodeBlocks);
-} else {
-  setTimeout(initCodeBlocks, 50);
-}
+function initCode(){document.querySelectorAll("pre").forEach(p=>{let c=p.querySelector("code")||p;let m=c.className.match(/language-([a-z]+)/i);let l=m?m[1].toUpperCase():"TEXT";p.dataset.lang=l;if(p.querySelector(".copy-container"))return;let con=document.createElement("div");con.className="copy-container";let b=document.createElement("button");b.innerHTML="复制";b.className="copy-btn";let t=document.createElement("span");t.innerHTML="复制";t.className="copy-text";con.appendChild(b);con.appendChild(t);p.appendChild(con);let cp=()=>{let txt=c.innerText.trim();navigator.clipboard.writeText(txt).then(()=>{b.innerHTML="已复制";b.className+=" copied";setTimeout(()=>{b.innerHTML="复制";b.className=b.className.replace(" copied","")},1800)})};b.onclick=cp;t.onclick=cp})}
+initCode();setTimeout(initCode,200)
 </script>`,//其他代码,显示在</head>前
     "codeBeforBody":``,//其他代码,显示在</body>前
     "commentCode":``,//评论区代码
