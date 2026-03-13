@@ -15,7 +15,137 @@ const OPT = {
     "cacheTime" : 60*60*24*0.5, //网页缓存时长(秒),建议=文章更新频率
     "themeURL" : "https://raw.githubusercontent.com/gdtool/cloudflare-workers-blog/master/themes/default2.0/", // 模板地址,以 "/"" 结尾
     "html404" : `<b>404</b>`,//404页面代码
-    "codeBeforHead":``,//其他代码,显示在</head>前
+    "codeBeforHead":`<style>
+pre {
+  --bg: #f8f9fa;
+  --border: #e9ecef;
+  --text: #374151;
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+  margin: 20px 0 !important;
+  overflow-x: auto !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+  position: relative !important;
+  font-family: 'SF Mono', Consolas, monospace !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+pre::before {
+  content: attr(data-lang, '') !important;
+  position: absolute !important;
+  top: 12px !important;
+  left: 16px !important;
+  background: #6b7280 !important;
+  color: white !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  z-index: 10 !important;
+  text-transform: uppercase !important;
+}
+.copy-container {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  display: flex !important;
+  gap: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+}
+pre:hover .copy-container { opacity: 1 !important; }
+.copy-btn {
+  width: 24px !important;
+  height: 24px !important;
+  background: #6b7280 !important;
+  border: none !important;
+  border-radius: 4px 0 0 4px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 12px !important;
+}
+.copy-btn:hover { background: #4b5563 !important; }
+.copy-btn.copied { background: #10b981 !important; }
+.copy-text {
+  width: 28px !important;
+  height: 24px !important;
+  background: #9ca3af !important;
+  border: none !important;
+  border-radius: 0 4px 4px 0 !important;
+  color: white !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  padding: 0 4px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.copy-text:hover { background: #6b7280 !important; }
+code {
+  color: var(--text) !important;
+  background: none !important;
+}
+code[class*="language-bash"] { color: #059669 !important; }
+code[class*="language-sh"] { color: #059669 !important; }
+code[class*="language-nginx"], code[class*="language-conf"] { color: #d97706 !important; }
+</style>
+<script>
+function initCodeBlocks() {
+  document.querySelectorAll('pre code').forEach(code => {
+    let langMatch = code.className.match(/language-(\\w+)/);
+    let lang = langMatch ? langMatch[1].toUpperCase() : '';
+    code.parentNode.dataset.lang = lang;
+    
+    if (code.parentNode.querySelector('.copy-container')) return;
+    
+    let container = document.createElement('div');
+    container.className = 'copy-container';
+    
+    let btn = document.createElement('button');
+    btn.innerHTML = '📋';
+    btn.className = 'copy-btn';
+    
+    let text = document.createElement('span');
+    text.innerHTML = '复制';
+    text.className = 'copy-text';
+    
+    container.appendChild(btn);
+    container.appendChild(text);
+    code.parentNode.appendChild(container);
+    
+    let copyText = () => {
+      let text = code.innerText.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerHTML = '✅';
+        btn.classList.add('copied');
+        text.innerHTML = '已复制';
+        setTimeout(() => {
+          btn.innerHTML = '📋';
+          btn.classList.remove('copied');
+          text.innerHTML = '复制';
+        }, 1800);
+      });
+    };
+    
+    btn.onclick = copyText;
+    text.onclick = copyText;
+  });
+}
+
+initCodeBlocks();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCodeBlocks);
+} else {
+  setTimeout(initCodeBlocks, 50);
+}
+</script>`,//其他代码,显示在</head>前
     "codeBeforBody":``,//其他代码,显示在</body>前
     "commentCode":``,//评论区代码
     "widgetOther":``,//20201224新增参数,用于右侧 小部件扩展
