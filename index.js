@@ -16,136 +16,20 @@ const OPT = {
     "themeURL" : "https://raw.githubusercontent.com/gdtool/cloudflare-workers-blog/master/themes/default2.0/", // 模板地址,以 "/"" 结尾
     "html404" : `<b>404</b>`,//404页面代码
     "codeBeforHead":`<style>
-pre {
-  --bg: #f8f9fa;
-  --border: #e9ecef;
-  --text: #374151;
-  background: var(--bg) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
-  padding: 20px !important;
-  margin: 20px 0 !important;
-  overflow-x: auto !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-  position: relative !important;
-  font-family: 'SF Mono', Consolas, monospace !important;
-  font-size: 14px !important;
-  line-height: 1.5 !important;
-}
-pre::before {
-  content: attr(data-lang, '') !important;
-  position: absolute !important;
-  top: 12px !important;
-  left: 16px !important;
-  background: #6b7280 !important;
-  color: white !important;
-  padding: 2px 8px !important;
-  border-radius: 4px !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.5px !important;
-  z-index: 10 !important;
-  text-transform: uppercase !important;
-}
-.copy-container {
-  position: absolute !important;
-  top: 12px !important;
-  right: 12px !important;
-  display: flex !important;
-  gap: 0 !important;
-  opacity: 0 !important;
-  transition: opacity 0.2s ease !important;
-}
-pre:hover .copy-container { opacity: 1 !important; }
-.copy-btn {
-  width: 24px !important;
-  height: 24px !important;
-  background: #6b7280 !important;
-  border: none !important;
-  border-radius: 4px 0 0 4px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  color: white !important;
-  font-size: 12px !important;
-}
-.copy-btn:hover { background: #4b5563 !important; }
-.copy-btn.copied { background: #10b981 !important; }
-.copy-text {
-  width: 28px !important;
-  height: 24px !important;
-  background: #9ca3af !important;
-  border: none !important;
-  border-radius: 0 4px 4px 0 !important;
-  color: white !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  padding: 0 4px !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.copy-text:hover { background: #6b7280 !important; }
-code {
-  color: var(--text) !important;
-  background: none !important;
-}
-code[class*="language-bash"] { color: #059669 !important; }
-code[class*="language-sh"] { color: #059669 !important; }
-code[class*="language-nginx"], code[class*="language-conf"] { color: #d97706 !important; }
-</style>
-<script>
-function initCodeBlocks() {
-  document.querySelectorAll('pre code').forEach(code => {
-    let langMatch = code.className.match(/language-(\\w+)/);
-    let lang = langMatch ? langMatch[1].toUpperCase() : '';
-    code.parentNode.dataset.lang = lang;
-    
-    if (code.parentNode.querySelector('.copy-container')) return;
-    
-    let container = document.createElement('div');
-    container.className = 'copy-container';
-    
-    let btn = document.createElement('button');
-    btn.innerHTML = '📋';
-    btn.className = 'copy-btn';
-    
-    let text = document.createElement('span');
-    text.innerHTML = '复制';
-    text.className = 'copy-text';
-    
-    container.appendChild(btn);
-    container.appendChild(text);
-    code.parentNode.appendChild(container);
-    
-    let copyText = () => {
-      let text = code.innerText.trim();
-      navigator.clipboard.writeText(text).then(() => {
-        btn.innerHTML = '✅';
-        btn.classList.add('copied');
-        text.innerHTML = '已复制';
-        setTimeout(() => {
-          btn.innerHTML = '📋';
-          btn.classList.remove('copied');
-          text.innerHTML = '复制';
-        }, 1800);
-      });
-    };
-    
-    btn.onclick = copyText;
-    text.onclick = copyText;
-  });
-}
-
-initCodeBlocks();
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCodeBlocks);
-} else {
-  setTimeout(initCodeBlocks, 50);
-}
-</script>`,//其他代码,显示在</head>前
+pre{--bg:#f8f9fa;--border:#e9ecef;--text:#374151;background:var(--bg)!important;border:1px solid var(--border)!important;border-radius:8px!important;padding:20px!important;margin:20px 0!important;overflow:auto!important;box-shadow:0 1px 3px rgba(0,0,0,0.1)!important;position:relative!important;font-family:'SF Mono',Consolas,monospace!important;font-size:14px!important;line-height:1.5!important}
+pre::before{content:attr(data-lang,'')!important;position:absolute!important;top:12px!important;left:16px!important;background:#6b7280!important;color:#fff!important;padding:2px 8px!important;border-radius:4px!important;font-size:11px!important;font-weight:600!important;letter-spacing:.5px!important;z-index:10!important;text-transform:uppercase!important}
+.copy-container{position:absolute!important;top:12px!important;right:12px!important;display:flex!important;gap:0!important;opacity:0!important;transition:opacity .2s ease!important}
+pre:hover .copy-container{opacity:1!important}
+.copy-btn{width:24px!important;height:24px!important;background:#6b7280!important;border:none!important;border-radius:4px 0 0 4px!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#fff!important;font-size:12px!important}
+.copy-btn:hover{background:#4b5563!important}
+.copy-btn.copied{background:#10b981!important}
+.copy-text{width:28px!important;height:24px!important;background:#9ca3af!important;border:none!important;border-radius:0 4px 4px 0!important;color:#fff!important;font-size:11px!important;font-weight:500!important;padding:0 4px!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.copy-text:hover{background:#6b7280!important}
+code{color:var(--text)!important;background:none!important}
+code[class*="language-bash"]{color:#059669!important}
+code[class*="language-sh"]{color:#059669!important}
+code[class*="language-nginx"],code[class*="language-conf"]{color:#d97706!important}
+</style><script>function init(){document.querySelectorAll('pre code').forEach(c=>{let m=c.className.match(/language-([a-zA-Z0-9]+)/i);let l=m?m[1].toUpperCase()||'TEXT':'TEXT';c.parentNode.dataset.lang=l;if(c.parentNode.querySelector('.copy-container'))return;let con=document.createElement('div');con.className='copy-container';let b=document.createElement('button');b.innerHTML='📋';b.className='copy-btn';let t=document.createElement('span');t.innerHTML='复制';t.className='copy-text';con.append(b,t);c.parentNode.appendChild(con);let cp=()=>{navigator.clipboard.writeText(c.innerText.trim()).then(()=>{b.innerHTML='✅';b.classList.add('copied');t.innerHTML='已复制';setTimeout(()=>{b.innerHTML='📋';b.classList.remove('copied');t.innerHTML='复制'},1800)})};b.onclick=t.onclick=cp})}init();setTimeout(init,100)</script>`,//其他代码,显示在</head>前
     "codeBeforBody":``,//其他代码,显示在</body>前
     "commentCode":``,//评论区代码
     "widgetOther":``,//20201224新增参数,用于右侧 小部件扩展
